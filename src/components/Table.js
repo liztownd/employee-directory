@@ -1,10 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import API from '../utils/API';
-import { useTable } from 'react-table';
+import { useTable, useGlobalFilter, useSortBy } from 'react-table';
 
 function Table() {
 
     const [loadingData, setLoadingData] = useState(true);
+
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        async function getData() {
+            await API.getEmployees()
+                .then(res => {
+                    console.log(res.data.results);
+                    setData(res.data.results)
+                    setLoadingData(false)
+
+                });
+        }
+        if (loadingData) {
+            getData()
+        }
+
+        // eslint-disable-next-line 
+    }, [])
+
+    // const Img = ({ colName, value }) => {
+    //     if (colName === 'Image') {
+    //         return <img src={value} alt={value} />;
+    //     }
+    // };
+
     const columns = React.useMemo(() => [
         {
             Header: "Image",
@@ -31,26 +57,52 @@ function Table() {
             Header: "DOB",
             accessor: "dob.date",
         }
+        // eslint-disable-next-line
     ], []);
 
-    const [data, setData] = useState([]);
 
-    useEffect(() => {
-        async function getData() {
-            await API.getEmployees()
-                .then(res => {
-                    console.log(res.data.results);
-                    setData(res.data.results)
-                    setLoadingData(false)
+    // const [filterInput, setFilterInput] = useState("");
 
-                });
-        }
-        if (loadingData) {
-            getData()
-        }
+    // const handleFilterChange = e => {
+    //     const value = e.target.value || undefined;
+    //     setFilter("data.name", value); // Update the show.name filter. Now our table will filter and show only the rows which have a matching value
+    //     setFilterInput(value);
+    // };
 
-        // eslint-disable-next-line 
-    }, [])
+    // function setFilter() {
+
+    // }
+
+    function GlobalFilter({
+        preGlobalFilteredRows,
+        globalFilter,
+        setGlobalFilter,
+      }) {
+        const count = preGlobalFilteredRows.length
+        const [value, setValue] = React.useState(globalFilter)
+        const onChange = (value => {
+          setGlobalFilter(value || undefined)
+        })
+      
+        return (
+          <span>
+            Search:{' '}
+            <input
+              value={value || ""}
+              onChange={e => {
+                setValue(e.target.value);
+                onChange(e.target.value);
+              }}
+              placeholder={`${count} records...`}
+              style={{
+                fontSize: '1.1rem',
+                border: '0',
+              }}
+            />
+          </span>
+        )
+      }
+
 
     const {
         getTableProps,
@@ -58,10 +110,14 @@ function Table() {
         headerGroups,
         rows,
         prepareRow,
-    } = useTable({ columns, data })
+    } = useTable(
+        { columns, data },
+        useGlobalFilter,
+        useSortBy)
 
     return (
         <div>
+            {GlobalFilter()}
             {loadingData ? (<p>Data Loading, please wait</p>) : (
                 <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
                     <thead>
@@ -93,7 +149,7 @@ function Table() {
                                             <td
                                                 {...cell.getCellProps()}
                                                 style={{
-                                                    padding: '10px',
+                                                    padding: '20px',
                                                     border: 'solid 1px gray',
                                                     background: 'papayawhip',
                                                 }}
