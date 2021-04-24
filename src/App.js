@@ -32,24 +32,44 @@ function App() {
       // eslint-disable-next-line 
   }, [])
 
+  function compareBy(d) {
+    return function (a, b) {
+      if (a[d.name.last] < b[d.name.last]) return -1;
+      if (a[d.name.last] > b[d.name.last]) return 1;
+      return 0;
+    };
+  };
 
-  // function getSort(d) {
-  //     let newDataArray = d.sort((a, b) => (a.name.last > b.name.last) ? 1 : -1);
-  //     setData(newDataArray);
-  // }
+  function getSort(d) {
+      let newDataArray = [...data]
+      newDataArray.sort(compareBy(d.name.last));
+      setData({data: newDataArray});
+  }
 
   function handleInputChange(e) {
       setFilter(e.target.value);
   }
 
-
+// function filterData(data) {
+//   data.filter(function(d){
+//     return d.name.last
+//     .toLowerCase()
+//     .includes(filter.toLowerCase())
+//   })
+// }
 
 
   return (
     <div className="container-fluid">
     <Header />
     <Filter filter={filter} handleInputChange={handleInputChange}/>
-    <BootTable data={data} />
+    <BootTable 
+    data={data.filter(function(d){
+      return d.name.last
+      .toLowerCase()
+      .includes(filter.toLowerCase())
+    })}
+    getSort={getSort} />
     </div>
   );
 }

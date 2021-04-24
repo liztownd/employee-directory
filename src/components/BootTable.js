@@ -2,6 +2,8 @@ import React from 'react';
 //import API from '../utils/API';
 import { Table } from 'react-bootstrap';
 import TableBody from "./TableBody";
+import SortButton from './SortButton';
+
 
 function BootTable({ data }) {
 
@@ -46,7 +48,8 @@ function BootTable({ data }) {
                     <tr>
                         <th>Image</th>
                         <th>Name
-                        {/* <Button className="m-1" variant="secondary" onClick={() => getSort(data)}>
+                            <SortButton />
+                        {/* <Button className="m-1" variant="secondary" onClick={() => props.getSort}>
                                 <i className="fas fa-chevron-down"></i></Button> */}
                             {/* <Button className="m-1" variant="secondary" onClick={() => setSortedFieldAsc()}>
                             <i class="fas fa-chevron-up"></i></Button> */}
@@ -59,6 +62,7 @@ function BootTable({ data }) {
                 <tbody>
                     {data.map((d) => (
                         <TableBody
+                            key={d.login.username}
                             image={d.picture.thumbnail}
                             nameFirst={d.name.first}
                             nameLast={d.name.last}
