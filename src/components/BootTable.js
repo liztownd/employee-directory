@@ -5,7 +5,7 @@ import TableBody from "./TableBody";
 import SortButton from './SortButton';
 
 
-function BootTable({ data }) {
+function BootTable({ data, getSort }) {
 
     // const [loadingData, setLoadingData] = useState(true);
 
@@ -48,7 +48,7 @@ function BootTable({ data }) {
                     <tr>
                         <th>Image</th>
                         <th>Name
-                            <SortButton />
+                            <SortButton getSort={getSort}/>
                         {/* <Button className="m-1" variant="secondary" onClick={() => props.getSort}>
                                 <i className="fas fa-chevron-down"></i></Button> */}
                             {/* <Button className="m-1" variant="secondary" onClick={() => setSortedFieldAsc()}>

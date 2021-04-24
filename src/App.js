@@ -32,43 +32,49 @@ function App() {
       // eslint-disable-next-line 
   }, [])
 
-  function compareBy(d) {
-    return function (a, b) {
-      if (a[d.name.last] < b[d.name.last]) return -1;
-      if (a[d.name.last] > b[d.name.last]) return 1;
+  function compareBy(a, b) {
+    //function (a, b) {
+      if (a.name.last < b.name.last) return -1;
+      if (a.name.last > b.name.last) return 1;
       return 0;
-    };
+  //  };
   };
 
-  function getSort(d) {
+  function getSort() {
+    console.log(data);
       let newDataArray = [...data]
-      newDataArray.sort(compareBy(d.name.last));
+      newDataArray.sort(compareBy);
       setData({data: newDataArray});
   }
 
   function handleInputChange(e) {
       setFilter(e.target.value);
+      
   }
 
-// function filterData(data) {
-//   data.filter(function(d){
-//     return d.name.last
-//     .toLowerCase()
-//     .includes(filter.toLowerCase())
-//   })
-// }
+  useEffect(() => {
+    const filteredData = data.filter(function(d){
+            return d.name.last
+            .toLowerCase()
+            .includes(filter.toLowerCase())
 
+           
+  //     // setData((previousData) => previousData.filter(function(d){
+  //     //   return d.name.last
+  //     //   .toLowerCase()
+  //     //   .includes(filter.toLowerCase())
+        
+  //   }))
+    })
+    setData(filteredData);
+  }, [filter, data]);
 
   return (
     <div className="container-fluid">
     <Header />
     <Filter filter={filter} handleInputChange={handleInputChange}/>
     <BootTable 
-    data={data.filter(function(d){
-      return d.name.last
-      .toLowerCase()
-      .includes(filter.toLowerCase())
-    })}
+    data={data}
     getSort={getSort} />
     </div>
   );
