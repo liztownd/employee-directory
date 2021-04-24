@@ -1,7 +1,6 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
-//import Table from './components/Table';
 import BootTable from './components/BootTable';
 import API from './utils/API';
 import Filter from './components/Filter';
@@ -12,6 +11,10 @@ function App() {
   const [loadingData, setLoadingData] = useState(true);
 
   const [data, setData] = useState([]);
+
+  const [filteredData, setFilteredData] = useState([]);
+
+	const [dataIsSorted, setDataIsSorted] = useState(false);
 
   const [filter, setFilter] = useState("");
 
@@ -32,43 +35,41 @@ function App() {
       // eslint-disable-next-line 
   }, [])
 
-  function compareBy(d) {
-    return function (a, b) {
-      if (a[d.name.last] < b[d.name.last]) return -1;
-      if (a[d.name.last] > b[d.name.last]) return 1;
-      return 0;
-    };
-  };
 
-  function getSort(d) {
-      let newDataArray = [...data]
-      newDataArray.sort(compareBy(d.name.last));
-      setData({data: newDataArray});
-  }
+  function sortAsc(a, b) {
+		if (a.name.last < b.name.last) return -1;
+		if (a.name.last > b.name.last) return 1;
+		return 0;
+	};
+  
+	function getSort() {
+		dataIsSorted
+			? setData((prevData) => [...prevData.sort().reverse()])
+			: setData((prevData) => [...prevData.sort(sortAsc)]);
+		setDataIsSorted(!dataIsSorted);
+	};
 
   function handleInputChange(e) {
       setFilter(e.target.value);
-  }
+      
+  };
 
-// function filterData(data) {
-//   data.filter(function(d){
-//     return d.name.last
-//     .toLowerCase()
-//     .includes(filter.toLowerCase())
-//   })
-// }
 
+  useEffect(() => {
+		const allData = [...data];
+		setFilteredData(
+			allData.filter((d) =>
+				d.name.last.toLowerCase().includes(filter.toLowerCase())
+			)
+		);
+	}, [data, filter]);
 
   return (
     <div className="container-fluid">
     <Header />
     <Filter filter={filter} handleInputChange={handleInputChange}/>
     <BootTable 
-    data={data.filter(function(d){
-      return d.name.last
-      .toLowerCase()
-      .includes(filter.toLowerCase())
-    })}
+    data={filteredData}
     getSort={getSort} />
     </div>
   );

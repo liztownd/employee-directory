@@ -3,8 +3,8 @@ import { Button } from 'react-bootstrap';
 
 
 function SortButton ({ getSort }) {
-   return (<Button className="m-1" variant="secondary" onClick={() => getSort}>
-    <i className="fas fa-chevron-down"></i></Button>)
+   return (<Button className="m-1" variant="secondary" onClick={getSort}>
+    <i className="fas fa-chevron-down"><i className="fas fa-chevron-up"></i></i></Button>)
 }
 
 export default SortButton;
