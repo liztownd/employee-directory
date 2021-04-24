@@ -1,7 +1,6 @@
 import React from 'react';
 
 function TableBody(props) {
-    console.log(props);
     
         return <tr key={props.dob.date}>
             <td><img src={props.image} alt={props.image}/></td>
