@@ -26,4 +26,4 @@ Data is populated from the <a href="https://randomuser.me">https://randomuser.me
 
 ## Deployment
 
-The app is deployed at 
+The app is deployed at <a href="https://liztownd.github.io/employee-directory/">https://liztownd.github.io/employee-directory/</a>.
